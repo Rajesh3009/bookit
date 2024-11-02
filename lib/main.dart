@@ -1,4 +1,5 @@
 import 'package:bookit/screens/home_screen.dart';
+import 'package:bookit/themes/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,11 +12,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BookIt',
-      color: Colors.amber,
-      home: HomeScreen(),
+      theme: orangeTheme,
+      home: const HomeScreen(),
     );
   }
 }

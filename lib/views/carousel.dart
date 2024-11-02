@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class Carousel extends StatefulWidget {
@@ -18,36 +16,8 @@ class _CarouselState extends State<Carousel> {
   ];
   int _currentPage = 0;
 
-  late Timer _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    _startAutoSwipe();
-  }
-
-  void _startAutoSwipe() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < images.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: const Duration(seconds: 5),
-        curve: Curves.easeInOut,
-      );
-    });
-  }
-
-  void _stopAutoSwipe() {
-    _timer.cancel();
-  }
-
   @override
   void dispose() {
-    _timer.cancel();
     _pageController.dispose();
     super.dispose();
   }
@@ -57,13 +27,13 @@ class _CarouselState extends State<Carousel> {
     return Stack(
       children: [
         PageView.builder(
+          scrollDirection: Axis.horizontal,
           controller: _pageController,
           itemCount: images.length,
-          
           itemBuilder: (context, index) {
             return Image.asset(
               images[index],
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             );
           },
           onPageChanged: (index) {
