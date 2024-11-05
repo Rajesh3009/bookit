@@ -1,4 +1,3 @@
-
 class Api {
   Map<String, dynamic> moviesData = {
     "movies": [
@@ -20,7 +19,7 @@ class Api {
       {
         "title": "Pulp Fiction",
         "image_url":
-            "https://image.tmdb.org/t/p/w500/dM2w364MScsjFf8pfMbaWUcWrR.jpg"
+            "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/wZbnRMarWnO4DJRisOaK4QEg1tl.jpg"
       },
       {
         "title": "Forrest Gump",
@@ -30,7 +29,7 @@ class Api {
       {
         "title": "Inception",
         "image_url":
-            "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"
+            "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/ljsZTbVsrQSqZgWeep2B1QiDKuh.jpg"
       },
       {
         "title": "Fight Club",
@@ -50,12 +49,11 @@ class Api {
       {
         "title": "The Lord of the Rings: The Return of the King",
         "image_url":
-            "https://image.tmdb.org/t/p/w500/9deYkU1mN2rHoI2oE9VQQLHjbY3.jpg"
+            "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/jNN8kQvGVFFdRXb6rZPUD6naqpI.jpg"
       }
     ]
   };
-Map<String, dynamic> loadData(){
-  return moviesData;
-}
-
+  Map<String, dynamic> loadData() {
+    return moviesData;
+  }
 }

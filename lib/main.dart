@@ -1,22 +1,29 @@
-import 'package:bookit/screens/home_screen.dart';
+import 'package:bookit/routes/routes.dart';
 import 'package:bookit/themes/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'screens/export.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MainApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'BookIt',
+      title: 'Bookit',
       theme: orangeTheme,
-      home: const HomeScreen(),
+      initialRoute: Routes.login, // Set initial route
+      routes: {
+        Routes.login: (context) => const LoginScreen(),
+        Routes.signup: (context) => const SignupScreen(),
+        Routes.home: (context) => const HomeScreen(),
+        // Add more routes here as needed
+      },
     );
   }
 }
