@@ -1,8 +1,10 @@
 import 'package:bookit/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -15,6 +17,75 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _acceptedTerms = false;
+  bool _isLoading = false;
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState!.validate() && _acceptedTerms) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        // Create the user account
+        final UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        // Save additional user data to Firestore
+        // await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(userCredential.user!.uid)
+        //     .set({
+        //   'name': _nameController.text.trim(),
+        //   'email': _emailController.text.trim(),
+        //   'createdAt': FieldValue.serverTimestamp(),
+        //   'updatedAt': FieldValue.serverTimestamp(),
+        // });
+
+        if (mounted) {
+          // Clear the navigation stack and redirect to home
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.home,
+            (route) => false,
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message ?? 'An error occurred during signup'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to save user data'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else if (!_acceptedTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please accept the Terms and Conditions'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +95,7 @@ class _SignupScreenState extends State<SignupScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pushNamed(context, Routes.login),
+          onPressed: () => Navigator.pushNamed(context, AppRoutes.login),
         ),
       ),
       body: SafeArea(
@@ -145,21 +216,24 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // Sign Up Button
                 ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate() && _acceptedTerms) {
-                      // Add your signup logic here
-                      print('Name: ${_nameController.text}');
-                      print('Email: ${_emailController.text}');
-                      print('Password: ${_passwordController.text}');
-                    }
-                  },
+                  onPressed: _isLoading ? null : _signUp,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          'Sign Up',
+                          style: TextStyle(fontSize: 18),
+                        ),
                 ),
                 const SizedBox(height: 16),
 
@@ -170,7 +244,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     const Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.login);
+                        Navigator.pushNamed(context, AppRoutes.login);
                       },
                       child: const Text('Login'),
                     ),
@@ -192,4 +266,4 @@ class _SignupScreenState extends State<SignupScreen> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-} 
+}

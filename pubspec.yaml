@@ -1,6 +1,6 @@
 name: bookit
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -8,6 +8,10 @@ environment:
 
 dependencies:
   cached_network_image: ^3.4.1
+  cloud_firestore: ^5.5.0
+  firebase_auth: ^5.3.3
+  firebase_core: ^3.8.0
+  firebase_database: ^11.1.6
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.3
@@ -16,6 +20,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  package_rename: ^1.7.1
+
+package_rename_config:
+  android:
+    app_name: Bookit # (String) The display name of the android app
+    package_name: i.maze.bookit # (String) The package name of the android app
 
 flutter:
   uses-material-design: true

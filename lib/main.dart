@@ -1,10 +1,14 @@
-import 'package:bookit/routes/routes.dart';
-import 'package:bookit/themes/apptheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/export.dart';
+import 'package:bookit/routes/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -15,15 +19,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Bookit',
-      theme: orangeTheme,
-      initialRoute: Routes.login, // Set initial route
-      routes: {
-        Routes.login: (context) => const LoginScreen(),
-        Routes.signup: (context) => const SignupScreen(),
-        Routes.home: (context) => const HomeScreen(),
-        // Add more routes here as needed
-      },
+      title: 'BookIt',
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+        useMaterial3: true,
+      ),
+      initialRoute: AppRoutes.home,
+      routes: AppRoutes.routes,
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => const Scaffold(
+          body: Center(
+            child: Text('Page not found!'),
+          ),
+        ),
+      ),
     );
   }
 }
