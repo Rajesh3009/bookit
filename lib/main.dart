@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'BookIt',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
       initialRoute: AppRoutes.home,

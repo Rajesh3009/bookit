@@ -1,5 +1,6 @@
 import 'package:bookit/services/api.dart';
 import 'package:bookit/utils/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,6 +37,7 @@ class ComingSoon extends ConsumerWidget {
                 itemCount: json['movies'].length,
                 shrinkWrap: false,
                 itemBuilder: (context, index) {
+                  final movie = json['movies'][index];
                   return Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: SizedBox(
@@ -60,18 +62,22 @@ class ComingSoon extends ConsumerWidget {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                json['movies'][index]['image_url'],
+                              child: CachedNetworkImage(
+                                fit: BoxFit.fill,
                                 width: 180,
                                 height: 220,
-                                fit: BoxFit.fill, // Adjust image size and fit
+                                imageUrl: movie['image_url'],
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           Flexible(
                             child: Text(
-                              json['movies'][index]['title'],
+                              movie['title'],
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,

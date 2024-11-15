@@ -1,6 +1,6 @@
-import 'package:bookit/views/comingsoon.dart';
 import 'package:bookit/views/homeview.dart';
-import 'package:bookit/views/nowplaying.dart';
+import 'package:bookit/views/profileview.dart';
+import 'package:bookit/views/ticketsview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,8 +17,8 @@ class HomeScreen extends ConsumerWidget {
 
     final List<Widget> pages = [
       const HomeView(),
-      const NowPlaying(),
-      const ComingSoon(),
+      const TicketsView(),
+      const ProfileView(),
     ];
 
     return Scaffold(

@@ -24,84 +24,103 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildHomeTab();
-  }
-
-  Widget _buildHomeTab() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.5),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: "Search",
-                      hintText: "Search",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: "Search",
+                        hintText: "Enter a search term",
+                        prefixIcon: Icon(Icons.search),
+                        filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 2.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.location_on),
-                      onPressed: () {
-                        // Add location handling logic here
-                      },
-                    ),
-                    const Text(
-                      'Ranchi',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                IconButton(
-                  icon: const Icon(Icons.logout),
-                  onPressed: () async {
-                    try {
-                      await FirebaseAuth.instance.signOut();
-                      if (context.mounted) {
-                        Navigator.pushReplacementNamed(
-                            context, AppRoutes.login);
-                      }
-                    } catch (error) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Logout failed: $error'),
-                            backgroundColor: Colors.red,
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      // Add location handling logic here
+                    },
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.location_on),
+                        Text(
+                          'Ranchi',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
                           ),
-                        );
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () async {
+                      try {
+                        await FirebaseAuth.instance.signOut();
+                        if (context.mounted) {
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.login);
+                        }
+                      } catch (error) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Logout failed: $error'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       }
-                    }
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const SizedBox(
-              width: double.infinity,
-              height: 200,
-              child: Carousel(),
-            ),
-            const SizedBox(height: 15),
-            const NowPlaying(),
-            const SizedBox(height: 15),
-            const ComingSoon(),
-          ],
+                    },
+                    child: const Column(
+                      children: [
+                        Icon(Icons.logout),
+                        Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: Carousel(),
+              ),
+              const SizedBox(height: 15),
+              const NowPlaying(),
+              const SizedBox(height: 15),
+              const ComingSoon(),
+            ],
+          ),
         ),
       ),
     );

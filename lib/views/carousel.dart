@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class Carousel extends StatefulWidget {
@@ -10,9 +11,9 @@ class Carousel extends StatefulWidget {
 class _CarouselState extends State<Carousel> {
   final PageController _pageController = PageController();
   final List<String> images = [
-    'assets/gf_banner.jpg',
-    'assets/dexter.jpg',
-    'assets/spiderman.jpg',
+    'https://image.tmdb.org/t/p/original/stKGOm8UyhuLPR9sZLjs5AkmncA.jpg',
+    'https://image.tmdb.org/t/p/original/dqK9Hag1054tghRQSqLSfrkvQnA.jpg',
+    'https://image.tmdb.org/t/p/original/lWQjg2SdXyzRkjfsFFWAqvb6ijx.jpg',
   ];
   int _currentPage = 0;
 
@@ -31,9 +32,14 @@ class _CarouselState extends State<Carousel> {
           controller: _pageController,
           itemCount: images.length,
           itemBuilder: (context, index) {
-            return Image.asset(
-              images[index],
+            return CachedNetworkImage(
               fit: BoxFit.fill,
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              imageUrl: images[index],
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             );
           },
           onPageChanged: (index) {

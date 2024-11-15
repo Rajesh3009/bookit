@@ -1,5 +1,6 @@
 import 'package:bookit/services/api.dart';
 import 'package:bookit/utils/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,11 +68,15 @@ class _NowPlayingState extends ConsumerState<NowPlaying> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          movie['image_url'],
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
                           width: 180,
                           height: 220,
-                          fit: BoxFit.fill,
+                          imageUrl: movie['image_url'],
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),
