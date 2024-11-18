@@ -11,6 +11,28 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Decode Firebase configuration files
+      - name: Decode google-services.json
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: 'google-services.json'
+          fileDir: './android/app/'
+          encodedString: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Decode firebase.json
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: 'firebase.json'
+          fileDir: './'
+          encodedString: ${{ secrets.FIREBASE_JSON }}
+
+      - name: Decode firebase_options.dart
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          fileName: 'firebase_options.dart'
+          fileDir: './lib/'
+          encodedString: ${{ secrets.FIREBASE_OPTIONS }}
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
