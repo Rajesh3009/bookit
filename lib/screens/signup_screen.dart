@@ -1,6 +1,7 @@
 import 'package:bookit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -26,11 +27,21 @@ class _SignupScreenState extends State<SignupScreen> {
 
       try {
         // Create the user account
-
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
+
+        // Save additional user data to Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'createdAt': FieldValue.serverTimestamp(),
+        });
 
         if (mounted) {
           // Clear the navigation stack and redirect to home
@@ -104,6 +115,25 @@ class _SignupScreenState extends State<SignupScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
+
+                // Name Field
+                TextFormField(
+                  controller: _nameController,
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: const InputDecoration(
+                    labelText: 'Full Name',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
 
                 // Email Field
                 TextFormField(

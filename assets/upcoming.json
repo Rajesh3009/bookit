@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Tiger 3",
+    "image_url": "https://example.com/images/tiger_3.jpg"
+  },
+  {
+    "title": "Dunki",
+    "image_url": "https://example.com/images/dunki.jpg"
+  },
+  {
+    "title": "Jawan",
+    "image_url": "https://example.com/images/jawan.jpg"
+  },
+  {
+    "title": "Kalki 2898 AD",
+    "image_url": "https://example.com/images/kalki_2898_ad.jpg"
+  },
+  {
+    "title": "Animal",
+    "image_url": "https://example.com/images/animal.jpg"
+  },
+  {
+    "title": "Fighter",
+    "image_url": "https://example.com/images/fighter.jpg"
+  },
+  {
+    "title": "Rocky Aur Rani Ki Prem Kahani",
+    "image_url": "https://example.com/images/rocky_aur_rani.jpg"
+  },
+  {
+    "title": "Dharavi Bank",
+    "image_url": "https://example.com/images/dharavi_bank.jpg"
+  },
+  {
+    "title": "Merry Christmas",
+    "image_url": "https://example.com/images/merry_christmas.jpg"
+  },
+  {
+    "title": "Bade Miyan Chote Miyan",
+    "image_url": "https://example.com/images/bade_miyan_chote_miyan.jpg"
+  }
+]
