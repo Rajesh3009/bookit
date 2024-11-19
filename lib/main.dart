@@ -1,6 +1,6 @@
+import 'package:bookit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bookit/routes/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -9,7 +9,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const ProviderScope(child: MyApp()));
+
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,15 +29,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.authWrapper,
       routes: AppRoutes.routes,
-      onUnknownRoute: (settings) => MaterialPageRoute(
-        builder: (context) => const Scaffold(
-          body: Center(
-            child: Text('Page not found!'),
-          ),
-        ),
-      ),
     );
   }
 }
