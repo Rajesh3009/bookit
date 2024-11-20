@@ -47,3 +47,5 @@ android/app/google-services.json
 firebase_options.b64
 firebase.json.b64
 google_services.b64
+firebase.b64
+google-services.b64
