@@ -94,12 +94,12 @@ class ProfileView extends ConsumerWidget {
                 }
               },
             ),
-            ElevatedButton(
-              onPressed: () {
-                DataUploader().uploadAllData();
-              },
-              child: const Text('Upload Data'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     DataUploader().uploadAllData();
+            //   },
+            //   child: const Text('Upload Data'),
+            // ),
           ],
         ),
       ),
