@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class MovieDetailPage extends StatelessWidget {
+class MovieDetailScreen extends StatelessWidget {
   final Map<String, dynamic> movie;
   final int index;
-  final String prefix;
+  final String heroTag;
 
-  const MovieDetailPage({
+  const MovieDetailScreen({
     super.key,
     required this.movie,
     required this.index,
-    this.prefix = '',
+    this.heroTag = '',
   });
 
   @override
   Widget build(BuildContext context) {
-    final heroTag =
-        movie['id'] != null ? '$prefix-${movie['id']}' : '$prefix-index-$index';
-
     return Scaffold(
       body: SafeArea(
         child: Stack(

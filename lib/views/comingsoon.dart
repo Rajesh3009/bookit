@@ -1,6 +1,6 @@
 import 'package:bookit/services/api.dart';
 import 'package:bookit/utils/constants.dart';
-import 'package:bookit/views/movie_detail_page.dart';
+import 'package:bookit/screens/movie_detail_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,10 +60,10 @@ class ComingSoon extends ConsumerWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MovieDetailPage(
+                          builder: (context) => MovieDetailScreen(
                             movie: movie,
                             index: index,
-                            prefix: 'upcoming',
+                            heroTag: heroTag,
                           ),
                         ),
                       );
