@@ -38,20 +38,26 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Get Version
+        id: version
+        run: |
+          version=$(grep version pubspec.yaml | cut -d: -f2 | tr -d ' "')
+          echo "::set-output name=version::$version"
+
       - name: Build Android Release
         run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
+          name: android-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
-          name: Bookit-Build-${{ github.run_id }}
+          name: Bookit-Build-${{ steps.version.outputs.version }}-${{ github.run_id }}
           draft: false
           prerelease: false
         env:
