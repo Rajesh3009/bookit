@@ -48,11 +48,10 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           files: build/app/outputs/flutter-apk/app-release.apk
-          name: Bookit-${{ github.ref_name }}
+          name: Bookit-Build-${{ github.run_id }}
           draft: false
           prerelease: false
         env:

@@ -1,10 +1,8 @@
 import 'package:bookit/routes/routes.dart';
-import 'package:bookit/utils/upload_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/profile_provider.dart';
-import 'edit_profile_view.dart';
 
 class ProfileView extends ConsumerWidget {
   const ProfileView({super.key});
@@ -28,32 +26,27 @@ class ProfileView extends ConsumerWidget {
                   : null,
             ),
             const SizedBox(height: 20),
-            if (profileState.isLoading)
-              const CircularProgressIndicator()
-            else if (profileState.error != null)
-              Text(
-                'Error: ${profileState.error}',
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              )
-            else
-              Text(
-                profileState.username ?? 'No username',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            // Improved conditional rendering using ternary operator
+            Text(
+              profileState.isLoading
+                  ? 'Loading...'
+                  : profileState.error != null
+                      ? 'Error: ${profileState.error}'
+                      : profileState.username ?? 'No username',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: profileState.error != null
+                    ? Theme.of(context).colorScheme.error
+                    : null,
               ),
+            ),
             const SizedBox(height: 30),
             ListTile(
               leading: const Icon(Icons.edit),
               title: const Text('Edit Profile'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditProfileView(),
-                  ),
-                );
+                Navigator.pushNamed(context, AppRoutes.editProfile);
               },
             ),
             ListTile(
@@ -74,7 +67,6 @@ class ProfileView extends ConsumerWidget {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () async {
-                // Store context in local variable
                 final navigator = Navigator.of(context);
                 try {
                   await FirebaseAuth.instance.signOut();
@@ -82,11 +74,20 @@ class ProfileView extends ConsumerWidget {
                     AppRoutes.authWrapper,
                     (route) => false,
                   );
-                } catch (error) {
+                } on FirebaseAuthException catch (e) { // More specific error handling
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Failed to logout: $error'),
+                        content: Text('Failed to logout: ${e.message}'), // Use error message
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                } catch (e) { // Catch other exceptions
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Failed to logout: $e'),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -94,12 +95,6 @@ class ProfileView extends ConsumerWidget {
                 }
               },
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     DataUploader().uploadAllData();
-            //   },
-            //   child: const Text('Upload Data'),
-            // ),
           ],
         ),
       ),
