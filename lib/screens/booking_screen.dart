@@ -210,8 +210,8 @@ class BookingScreen extends ConsumerWidget {
 }
 
 // Providers for managing state
-final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
-final selectedTimeProvider = StateProvider<String?>((ref) => null);
-final selectedSeatsProvider = StateProvider<int>((ref) => 1);
+final selectedDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
+final selectedTimeProvider = StateProvider.autoDispose<String?>((ref) => null);
+final selectedSeatsProvider = StateProvider.autoDispose<int>((ref) => 1);
 final isLoadingProvider =
-    StateProvider<bool>((ref) => false); // Add isLoading provider
+    StateProvider.autoDispose<bool>((ref) => false); // Add isLoading provider

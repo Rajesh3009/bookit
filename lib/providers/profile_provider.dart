@@ -6,12 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileState {
   final String? username;
+  final String? email;
   final String? profileImageUrl;
   final bool isLoading;
   final String? error;
 
   ProfileState({
     this.username,
+    this.email,
     this.profileImageUrl,
     this.isLoading = false,
     this.error,
@@ -19,12 +21,14 @@ class ProfileState {
 
   ProfileState copyWith({
     String? username,
+    String? email,
     String? profileImageUrl,
     bool? isLoading,
     String? error,
   }) {
     return ProfileState(
       username: username ?? this.username,
+      email: email ?? this.email,
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       isLoading: isLoading ?? this.isLoading,
       error: error,
@@ -42,14 +46,13 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     if (uid == null) return;
 
     try {
-      final doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
-      
+      final doc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
       if (doc.exists) {
         state = ProfileState(
           username: doc.data()?['username'],
+          email: doc.data()?['email'],
           profileImageUrl: doc.data()?['profileImageUrl'],
         );
       }
@@ -60,10 +63,11 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 
   Future<void> updateProfile({
     required String username,
+    required String email,
     File? imageFile,
   }) async {
     state = state.copyWith(isLoading: true, error: null);
-    
+
     try {
       final String uid = FirebaseAuth.instance.currentUser!.uid;
       String? imageUrl = state.profileImageUrl;
@@ -85,6 +89,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       try {
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
           'username': username,
+          'email': email,
           if (imageUrl != null) 'profileImageUrl': imageUrl,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
@@ -94,6 +99,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 
       state = ProfileState(
         username: username,
+        email: email,
         profileImageUrl: imageUrl,
         isLoading: false,
       );
@@ -108,6 +114,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 }
 
 // Create the provider
-final profileProvider = StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
+final profileProvider =
+    StateNotifierProvider<ProfileNotifier, ProfileState>((ref) {
   return ProfileNotifier();
-}); 
+});

@@ -41,6 +41,13 @@ class ProfileView extends ConsumerWidget {
                     : null,
               ),
             ),
+            const SizedBox(height: 10),
+            Text(
+              profileState.isLoading
+                  ? ''
+                  : profileState.email ?? 'No email',
+              style: const TextStyle(fontSize: 16),
+            ),
             const SizedBox(height: 30),
             ListTile(
               leading: const Icon(Icons.edit),
