@@ -38,7 +38,7 @@ class _SignupScreenState extends State<SignupScreen> {
             .collection('users')
             .doc(userCredential.user!.uid)
             .set({
-          'name': _nameController.text.trim(),
+          'username': _nameController.text.trim(),
           'email': _emailController.text.trim(),
           'createdAt': FieldValue.serverTimestamp(),
         });

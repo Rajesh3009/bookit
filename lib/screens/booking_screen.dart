@@ -16,6 +16,8 @@ class BookingScreen extends ConsumerWidget {
     final selectedTime = ref.watch(selectedTimeProvider);
     final selectedSeats = ref.watch(selectedSeatsProvider);
     ref.read(profileProvider);
+    final isLoading =
+        ref.watch(isLoadingProvider); // Use a provider for isLoading
 
     return Scaffold(
       appBar: AppBar(
@@ -157,38 +159,47 @@ class BookingScreen extends ConsumerWidget {
             SizedBox(
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () async {
-                  // Prepare booking details
-                  final bookingDetails = {
-                    'movie': movie['title'],
-                    'date': selectedDate?.toLocal().toString().split(' ')[0],
-                    'time': selectedTime,
-                    'seats': selectedSeats,
-                  };
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        ref.read(isLoadingProvider.notifier).state =
+                            true; // Set isLoading to true
+                        // Prepare booking details
+                        final bookingDetails = {
+                          'movie': movie['title'],
+                          'date':
+                              selectedDate?.toLocal().toString().split(' ')[0],
+                          'time': selectedTime,
+                          'seats': selectedSeats,
+                        };
 
-                  // Call the booking provider
-                  final result =
-                      await ref.read(bookingProvider(bookingDetails).future);
+                        // Call the booking provider
+                        final result = await ref
+                            .read(bookingProvider(bookingDetails).future);
 
-                  // Handle the result
-                  if (result.success) {
-                    if (!context.mounted) {
-                      return; // Check if the widget is still mounted
-                    }
-                    Navigator.pop(context); // Go back to the home page
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Booking successful!'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    // Show success message or navigate
-                  } else {
-                    log('Error: ${result.message}');
-                    // Show error message
-                  }
-                },
-                child: const Text('Book Now'),
+                        // Handle the result
+                        ref.read(isLoadingProvider.notifier).state =
+                            false; // Set isLoading to false
+                        if (result.success) {
+                          if (!context.mounted) {
+                            return; // Check if the widget is still mounted
+                          }
+                          Navigator.pop(context); // Go back to the home page
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Booking successful!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          // Show success message or navigate
+                        } else {
+                          log('Error: ${result.message}');
+                          // Show error message
+                        }
+                      },
+                child: isLoading
+                    ? const CircularProgressIndicator() // Show loading indicator
+                    : const Text('Book Now'),
               ),
             ),
           ],
@@ -199,6 +210,8 @@ class BookingScreen extends ConsumerWidget {
 }
 
 // Providers for managing state
-final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
-final selectedTimeProvider = StateProvider<String?>((ref) => null);
-final selectedSeatsProvider = StateProvider<int>((ref) => 1);
+final selectedDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
+final selectedTimeProvider = StateProvider.autoDispose<String?>((ref) => null);
+final selectedSeatsProvider = StateProvider.autoDispose<int>((ref) => 1);
+final isLoadingProvider =
+    StateProvider.autoDispose<bool>((ref) => false); // Add isLoading provider

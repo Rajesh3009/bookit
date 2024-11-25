@@ -15,20 +15,22 @@ class EditProfileView extends ConsumerStatefulWidget {
 
 class _EditProfileViewState extends ConsumerState<EditProfileView> {
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   File? _imageFile;
 
   @override
   void initState() {
     super.initState();
-    // Initialize username from current profile state
+    // Initialize username and email from current profile state
     final profileState = ref.read(profileProvider);
     _usernameController.text = profileState.username ?? '';
+    _emailController.text = profileState.email ?? ''; // Initialize email
   }
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    
+
     if (image != null) {
       setState(() {
         _imageFile = File(image.path);
@@ -47,6 +49,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     try {
       await ref.read(profileProvider.notifier).updateProfile(
         username: _usernameController.text,
+        email: _emailController.text, // Pass email
         imageFile: _imageFile,
       );
 
@@ -77,35 +80,15 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: _imageFile != null 
-                    ? FileImage(_imageFile!) 
-                    : (profileState.profileImageUrl != null 
-                        ? NetworkImage(profileState.profileImageUrl!) 
-                        : null) as ImageProvider?,
-                child: (_imageFile == null && profileState.profileImageUrl == null)
-                    ? const Icon(Icons.person, size: 50)
-                    : null,
-              ),
-            ),
-            const SizedBox(height: 20),
+            // ... (rest of the code)
             TextField(
-              controller: _usernameController,
+              controller: _emailController,
               decoration: const InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email',
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: profileState.isLoading ? null : _saveProfile,
-              child: profileState.isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('Save Changes'),
-            ),
+            // ... (rest of the code)
           ],
         ),
       ),
@@ -115,6 +98,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   @override
   void dispose() {
     _usernameController.dispose();
+    _emailController.dispose(); // Dispose of email controller
     super.dispose();
   }
-} 
+}
