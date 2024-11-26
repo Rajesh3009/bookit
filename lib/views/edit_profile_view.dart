@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:bookit/providers/profile_provider.dart';
 
@@ -16,7 +14,6 @@ class EditProfileView extends ConsumerStatefulWidget {
 class _EditProfileViewState extends ConsumerState<EditProfileView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  File? _imageFile;
 
   @override
   void initState() {
@@ -27,50 +24,11 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     _emailController.text = profileState.email ?? ''; // Initialize email
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
-      setState(() {
-        _imageFile = File(image.path);
-      });
-    }
-  }
-
-  Future<void> _saveProfile() async {
-    if (_usernameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a username')),
-      );
-      return;
-    }
-
-    try {
-      await ref.read(profileProvider.notifier).updateProfile(
-        username: _usernameController.text,
-        email: _emailController.text, // Pass email
-        imageFile: _imageFile,
-      );
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error updating profile: ${e.toString()}')),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final profileState = ref.watch(profileProvider);
+    ref.watch(profileProvider);
 
     return Scaffold(
       appBar: AppBar(

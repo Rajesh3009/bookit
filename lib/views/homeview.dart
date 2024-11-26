@@ -1,8 +1,6 @@
-import 'package:bookit/routes/routes.dart';
 import 'package:bookit/views/carousel.dart';
 import 'package:bookit/views/comingsoon.dart';
 import 'package:bookit/views/nowplaying.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,39 +64,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         Icon(Icons.location_on),
                         Text(
                           'Ranchi',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () async {
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                        if (context.mounted) {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.login);
-                        }
-                      } catch (error) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Logout failed: $error'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                    child: const Column(
-                      children: [
-                        Icon(Icons.logout),
-                        Text(
-                          'Logout',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
