@@ -48,9 +48,10 @@ class MovieDetailScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text('Year: ${movie['year']}'),
+                            Text(
+                                'Year: ${movie['year'] ?? 'No year available'}'),
                             const SizedBox(width: 8),
-                            Text(movie['runtime'])
+                            Text(movie['runtime'] ?? 'No runtime available'),
                           ],
                         ),
                         const SizedBox(height: 8),
@@ -79,9 +80,7 @@ class MovieDetailScreen extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.orange,
                                     foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+                                    elevation: 3,
                                   ),
                                   child: const Text(
                                     'Book Tickets',

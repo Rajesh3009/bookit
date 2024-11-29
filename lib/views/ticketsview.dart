@@ -11,6 +11,7 @@ class TicketsView extends StatelessWidget {
     return FirebaseFirestore.instance
         .collection('bookings')
         .where('userId', isEqualTo: userId)
+        .orderBy('createdAt', descending: true)
         .snapshots();
   }
 
@@ -29,7 +30,6 @@ class TicketsView extends StatelessWidget {
           ),
           child: Icon(
             Icons.confirmation_number,
-            color: Theme.of(context).primaryColor,
           ),
         ),
         title: Text(
