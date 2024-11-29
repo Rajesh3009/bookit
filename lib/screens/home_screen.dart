@@ -23,37 +23,57 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: PageView(
-          controller: pageController,
-          onPageChanged: (index) {
-            ref.read(currentIndexProvider.notifier).update((_) => index);
-          },
-          children: pages,
+        child: Stack(
+          children: [
+            PageView(
+              controller: pageController,
+              onPageChanged: (index) {
+                ref.read(currentIndexProvider.notifier).update((_) => index);
+              },
+              children: pages,
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: BottomNavigationBar(
+                    currentIndex: currentIndex,
+                    onTap: (index) {
+                      pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    type: BottomNavigationBarType.fixed,
+                    backgroundColor: Colors.white.withOpacity(0.8),
+                    elevation: 0,
+                    unselectedItemColor: Colors.black54,
+                    selectedItemColor: Colors.deepPurple,
+                    items: const [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home),
+                        label: 'Home',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.list),
+                        label: 'My Tickets',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.person),
+                        label: 'Account',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'My Tickets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
       ),
     );
   }

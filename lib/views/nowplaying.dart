@@ -157,7 +157,7 @@ class _NowPlayingState extends ConsumerState<NowPlaying> {
     return SizedBox(
       height: 55,
       child: Text(
-        movie['title'],
+        movie['title'] ?? 'No Title',
         style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,

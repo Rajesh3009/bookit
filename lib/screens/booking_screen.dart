@@ -11,6 +11,8 @@ class BookingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final defaultFontSize = 16.0;
+    final titleFontSize = 20.0;
     // State variables can be managed using providers
     final selectedDate = ref.watch(selectedDateProvider);
     final selectedTime = ref.watch(selectedTimeProvider);
@@ -18,6 +20,7 @@ class BookingScreen extends ConsumerWidget {
     ref.read(profileProvider);
     final isLoading =
         ref.watch(isLoadingProvider); // Use a provider for isLoading
+    final sortedShowtimes = movie["showtime"];
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +32,10 @@ class BookingScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const Text('Select a date:'),
+            Text(
+              'Select a date:',
+              style: TextStyle(fontSize: titleFontSize),
+            ),
             SizedBox(
               height: 80,
               child: ListView.builder(
@@ -40,7 +46,7 @@ class BookingScreen extends ConsumerWidget {
                   return GestureDetector(
                     onTap: () {
                       ref.read(selectedDateProvider.notifier).state = date;
-                      log('$date');
+                     
                     },
                     child: Card(
                       color: selectedDate?.day == date.day
@@ -53,18 +59,19 @@ class BookingScreen extends ConsumerWidget {
                           children: [
                             Text(
                               '${date.day}',
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: defaultFontSize,
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                               [
-                                'Sun',
                                 'Mon',
                                 'Tue',
                                 'Wed',
                                 'Thu',
                                 'Fri',
-                                'Sat'
+                                'Sat',
+                                'Sun',
                               ][date.weekday - 1],
                               style: const TextStyle(fontSize: 14),
                             ),
@@ -77,40 +84,34 @@ class BookingScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text('Select a time:'),
+            Text(
+              'Select a time:',
+              style: TextStyle(fontSize: titleFontSize),
+            ),
             SizedBox(
               height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: movie["showtime"].length,
                 itemBuilder: (context, index) {
-                  final sortedShowtimes = List<String>.from(movie["showtime"])
-                    ..sort((a, b) {
-                      final aFormatted = a.padLeft(5, '0');
-                      final bFormatted = b.padLeft(5, '0');
-                      return DateTime.parse("1970-01-01 $aFormatted")
-                          .compareTo(DateTime.parse("1970-01-01 $bFormatted"));
-                    });
                   final showtime = sortedShowtimes[index];
                   return GestureDetector(
                     onTap: () {
                       ref.read(selectedTimeProvider.notifier).state = showtime;
                     },
-                    child: Card(
-                      color: selectedTime == showtime
-                          ? Colors.orange
-                          : Colors.white,
-                      child: SizedBox(
-                        width: 80,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              showtime,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                    child: SizedBox(
+                      width: 100,
+                      child: Card(
+                        color: selectedTime == showtime
+                            ? Colors.orange
+                            : Colors.white,
+                        child: Center(
+                          child: Text(
+                            showtime,
+                            style: TextStyle(
+                                fontSize: defaultFontSize,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
@@ -119,7 +120,10 @@ class BookingScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text('Select number of seats:'),
+            Text(
+              'Select number of seats:',
+              style: TextStyle(fontSize: titleFontSize),
+            ),
             SizedBox(
               height: 80,
               child: ListView.builder(
@@ -131,7 +135,6 @@ class BookingScreen extends ConsumerWidget {
                     onTap: () {
                       ref.read(selectedSeatsProvider.notifier).state =
                           seatCount;
-                      log('Selected $seatCount seat(s)');
                     },
                     child: Card(
                       color: selectedSeats == seatCount
@@ -144,8 +147,9 @@ class BookingScreen extends ConsumerWidget {
                           children: [
                             Text(
                               '$seatCount',
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: defaultFontSize,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -210,7 +214,8 @@ class BookingScreen extends ConsumerWidget {
 }
 
 // Providers for managing state
-final selectedDateProvider = StateProvider.autoDispose<DateTime?>((ref) => null);
+final selectedDateProvider =
+    StateProvider.autoDispose<DateTime?>((ref) => null);
 final selectedTimeProvider = StateProvider.autoDispose<String?>((ref) => null);
 final selectedSeatsProvider = StateProvider.autoDispose<int>((ref) => 1);
 final isLoadingProvider =
