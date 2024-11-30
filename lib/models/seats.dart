@@ -1,13 +1,20 @@
-class Seat {
-  final int row;
-  final int column;
-  bool isSelected;
-  bool isBooked;
+class SeatSelection {
+  final Set<String> selectedSeats;
+  final Set<String> bookedSeats;
 
-  Seat({
-    required this.row,
-    required this.column,
-    this.isSelected = false,
-    this.isBooked = false,
-  });
+  SeatSelection({
+    Set<String>? selectedSeats,
+    Set<String>? bookedSeats,
+  })  : selectedSeats = selectedSeats ?? {},
+        bookedSeats = bookedSeats ?? {'B4', 'C5', 'D6'};
+
+  SeatSelection copyWith({
+    Set<String>? selectedSeats,
+    Set<String>? bookedSeats,
+  }) {
+    return SeatSelection(
+      selectedSeats: selectedSeats ?? this.selectedSeats,
+      bookedSeats: bookedSeats ?? this.bookedSeats,
+    );
+  }
 }
