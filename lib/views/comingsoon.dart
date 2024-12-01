@@ -1,3 +1,4 @@
+import 'package:bookit/screens/movielist_screen.dart';
 import 'package:bookit/services/api.dart';
 import 'package:bookit/utils/constants.dart';
 import 'package:bookit/screens/movie_detail_screen.dart';
@@ -22,7 +23,7 @@ class ComingSoon extends ConsumerWidget {
 
         return Column(
           children: [
-            const Row(
+            Row(
               children: [
                 Text(
                   "Coming Soon",
@@ -32,12 +33,20 @@ class ComingSoon extends ConsumerWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
-                Text(
-                  "View All >",
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MovielistScreen('upcoming'),
+                    ),
+                  ),
+                  child: Text(
+                    "View All >",
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:bookit/screens/booking_screen.dart';
+import 'package:bookit/screens/movielist_screen.dart';
 import 'package:bookit/services/api.dart';
 import 'package:bookit/utils/constants.dart';
 import 'package:bookit/screens/movie_detail_screen.dart';
@@ -38,10 +39,10 @@ class _NowPlayingState extends ConsumerState<NowPlaying> {
   }
 
   Widget _buildHeader() {
-    return const Row(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "Now Playing",
           style: TextStyle(
             color: Colors.black,
@@ -49,13 +50,18 @@ class _NowPlayingState extends ConsumerState<NowPlaying> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Spacer(),
-        Text(
-          'View All >',
-          style: TextStyle(
-            color: Colors.orange,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        const Spacer(),
+        GestureDetector(
+          onTap: ()=>Navigator.push(
+            context,MaterialPageRoute(builder: (context) => MovielistScreen('nowplaying'),)
+          ),
+          child: Text(
+            'View All >',
+            style: TextStyle(
+              color: Colors.orange,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         )
       ],

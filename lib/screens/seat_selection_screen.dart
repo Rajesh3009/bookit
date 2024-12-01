@@ -23,6 +23,11 @@ class SeatSelection extends ConsumerWidget {
     final selectedTime = ref.watch(selectedTimeProvider);
     final seatState = ref.watch(seatSelectionProvider);
 
+    // Check for null values and handle them
+    if (selectedDate == null || selectedTime == null) {
+      return Center(child: Text("Please select a date and time."));
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[50],
@@ -44,7 +49,7 @@ class SeatSelection extends ConsumerWidget {
                   Column(
                     children: [
                       Text(
-                        DateFormat('EEEE').format(selectedDate!),
+                        DateFormat('EEEE').format(selectedDate),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),

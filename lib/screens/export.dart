@@ -6,3 +6,4 @@ export 'booking_screen.dart';
 export 'movie_detail_screen.dart';
 export 'edit_profile_view.dart';
 export 'seat_selection_screen.dart';
+export 'wallet_page.dart';

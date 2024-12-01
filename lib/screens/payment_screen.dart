@@ -1,7 +1,9 @@
+import 'package:bookit/providers/booking_provider.dart';
 import 'package:bookit/providers/seat_provider.dart';
 import 'package:bookit/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import 'export.dart';
 
@@ -9,7 +11,7 @@ final paymentProvider = StateProvider((ref) => "");
 final isLoadingProvider = StateProvider((ref) => false);
 
 class PaymentScreen extends ConsumerWidget {
-  final Map<String, dynamic> movie;
+  final Map<String, dynamic>? movie; // Added ? to handle null movie
   PaymentScreen(this.movie, {super.key});
   final List<String> paymentType = [
     'UPI',
@@ -22,9 +24,9 @@ class PaymentScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.read(selectedDateProvider);
     final selectedTime = ref.read(selectedTimeProvider);
-    final seatState = ref.read(seatSelectionProvider);
+    final selectedSeats = ref.read(seatSelectionProvider);
     final selectedPayment = ref.watch(paymentProvider);
-    final isLoading = ref.watch(isLoadingProvider);
+    // final isLoading = ref.watch(isLoadingProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,13 +38,14 @@ class PaymentScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${movie['title']}',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              if (movie != null) // Check if movie is not null
+                Text(
+                  '${movie!['title']}', // Use movie! to access the title
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
               const SizedBox(height: 16),
               Text(
                 'Date: ${selectedDate?.day}-${selectedDate?.month}-${selectedDate?.year}',
@@ -57,7 +60,7 @@ class PaymentScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Selected Seats: ${seatState.selectedSeats.join(', ')}',
+                'Selected Seats: ${selectedSeats.selectedSeats.join(', ')}',
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
@@ -66,23 +69,22 @@ class PaymentScreen extends ConsumerWidget {
                 'Select a payment type:',
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: paymentType.length,
-                    itemBuilder: (context, index) {
-                      final payment = paymentType[index];
-                      return ListTile(
-                        title: Text(payment),
-                        trailing: Radio(
-                          value: payment,
-                          groupValue: selectedPayment,
-                          onChanged: (value) {
-                            ref
-                                .read(paymentProvider.notifier)
-                                .update((_) => value!);
-                          },
-                        ),
-                      );
-                    }),
+                child: ListView(
+                  children: paymentType.map((payment) {
+                    return ListTile(
+                      title: Text(payment),
+                      trailing: Radio(
+                        value: payment,
+                        groupValue: selectedPayment,
+                        onChanged: (value) {
+                          ref
+                              .read(paymentProvider.notifier)
+                              .update((_) => value!);
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
               const Spacer(),
               GestureDetector(
@@ -91,18 +93,36 @@ class PaymentScreen extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Please select a payment method")));
                   } else {
-                    ref.read(paymentProvider.notifier).update((state) => "");
                     ref
                         .read(isLoadingProvider.notifier)
                         .update((state) => true);
-                    Future.delayed(const Duration(seconds: 3), () {
-                      ref
-                          .read(isLoadingProvider.notifier)
-                          .update((state) => false);
-                      if (context.mounted) {
-                        Navigator.pushNamed(context, AppRoutes.home);
-                      }
-                    });
+
+                    ref.read(bookingProvider({
+                      'movie': movie!['title'], // Use movie! to access the title
+                      'date': DateFormat('dd-MM-yyyy').format(selectedDate!),
+                      'time': selectedTime,
+                      'seats': selectedSeats.selectedSeats,
+                    }));
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Booking successful"),
+                      ),
+                    );
+
+                    ref.read(paymentProvider.notifier).update((state) => "");
+
+                    if (context.mounted) {
+                      ref.invalidate(seatSelectionProvider);
+                      ref.invalidate(selectedDateProvider);
+                      ref.invalidate(selectedTimeProvider);
+                      ref.invalidate(paymentProvider);
+                      Navigator.pushNamed(context, AppRoutes.home);
+                    }
+
+                    ref
+                        .read(isLoadingProvider.notifier)
+                        .update((state) => false);
                   }
                 },
                 child: Container(
@@ -121,7 +141,7 @@ class PaymentScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Toatal amount: ₹${seatState.selectedSeats.length * 180}",
+                          "Total amount: ₹${selectedSeats.selectedSeats.length * 180}",
                           style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
