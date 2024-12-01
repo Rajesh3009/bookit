@@ -4,15 +4,14 @@ import 'package:bookit/views/ticketsview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final currentIndexProvider = StateProvider<int>((ref) => 0);
-final pageControllerProvider = Provider((ref) => PageController());
+final currentIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pageController = ref.watch(pageControllerProvider);
+    final pageController = PageController();
     final currentIndex = ref.watch(currentIndexProvider);
 
     final List<Widget> pages = [

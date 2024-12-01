@@ -1,4 +1,5 @@
 import 'package:bookit/routes/routes.dart';
+import 'package:bookit/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,6 +78,8 @@ class ProfileView extends ConsumerWidget {
                 final navigator = Navigator.of(context);
                 try {
                   await FirebaseAuth.instance.signOut();
+                  ref.invalidate(profileProvider);
+                  ref.invalidate(currentIndexProvider);
                   navigator.pushNamedAndRemoveUntil(
                     AppRoutes.authWrapper,
                     (route) => false,

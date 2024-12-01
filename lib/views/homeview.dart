@@ -4,6 +4,8 @@ import 'package:bookit/views/nowplaying.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../screens/export.dart';
+
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -71,6 +73,18 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.account_balance_wallet),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              WalletPage(), // Navigate to WalletPage
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
