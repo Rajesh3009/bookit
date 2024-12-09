@@ -41,6 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
             .set({
           'username': _nameController.text.trim(),
           'email': _emailController.text.trim(),
+          'wallet': 0,
           'createdAt': FieldValue.serverTimestamp(),
         });
 
