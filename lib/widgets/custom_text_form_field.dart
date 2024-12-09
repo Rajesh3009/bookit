@@ -29,17 +29,22 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: TextStyle(
-          color: Colors.white,
+        labelStyle: TextStyle(color: Colors.black),
+        prefixIcon: Icon(prefixIcon, color: Colors.black),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
         ),
-        border: const OutlineInputBorder(),
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-                color: Colors.white,
-              )
-            : null,
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
       ),
+      cursorColor: Colors.white,
       validator: validator,
     );
   }

@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:bookit/views/carousel.dart';
 import 'package:bookit/views/comingsoon.dart';
 import 'package:bookit/views/nowplaying.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../screens/export.dart';
 
@@ -33,8 +35,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: TextField(
                       decoration: InputDecoration(
                         labelText: "Search",
@@ -56,36 +59,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      // Add location handling logic here
-                    },
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(Icons.location_on),
-                        Text(
-                          'Ranchi',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                  MyIconBtn(
+                    title: 'Ranchi',
+                    icon: Icons.location_on,
                   ),
-                  IconButton(
-                    icon: Icon(Icons.account_balance_wallet),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              WalletPage(), // Navigate to WalletPage
-                        ),
-                      );
-                    },
-                  ),
+                  const SizedBox(width: 10),
+                  MyIconBtn(
+                      title: 'Wallet',
+                      icon: Icons.account_balance_wallet_rounded,
+                      onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  WalletPage(), // Navigate to WalletPage
+                            ),
+                          )),
                 ],
               ),
               const SizedBox(height: 10),
@@ -101,6 +89,38 @@ class _HomeViewState extends ConsumerState<HomeView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyIconBtn extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+  final IconData? icon;
+  const MyIconBtn({
+    super.key,
+    required this.title,
+    this.onTap,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(icon),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }
