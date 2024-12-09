@@ -68,7 +68,7 @@ class MovielistScreen extends ConsumerWidget {
               },
               child: Hero(
                 tag: heroTag,
-                child: _buildMovieImage(movie),
+                child: _buildMovieImage(movie, context),
               ),
             ),
           ),
@@ -83,7 +83,9 @@ class MovielistScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMovieImage(dynamic movie) {
+  Widget _buildMovieImage(dynamic movie, BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -100,8 +102,8 @@ class MovielistScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         child: CachedNetworkImage(
           fit: BoxFit.fill,
-          width: 180,
-          height: 240,
+          width: width * 0.45,
+          height: height * 0.45,
           imageUrl: movie['image_url'],
           placeholder: (context, url) => Container(
             color: Colors.grey[300],

@@ -92,16 +92,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Email',
                       labelStyle: TextStyle(color: Colors.white),
+                      prefixIcon: Icon(Icons.email, color: Colors.white),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)),
-                      prefixIcon: Icon(Icons.email, color: Colors.white),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
                     ),
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -118,10 +127,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: const InputDecoration(
                       labelText: 'Password',
                       labelStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
                       prefixIcon: Icon(Icons.lock, color: Colors.white),
                     ),
+                    cursorColor: Colors.white,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -158,7 +178,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       // Add forgot password logic
                     },
-                    child: const Text('Forgot Password?'),
+                    child: const Text('Forgot Password?',
+                        style: TextStyle(color: Colors.white)),
                   ),
 
                   // Add this after the "Forgot Password" button
